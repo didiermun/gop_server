@@ -1,6 +1,7 @@
   // const { PrismaClient } = require('@prisma/client')
   // const prisma = new PrismaClient()
   const {Group} = require("../models/Group")
+  const {Report} = require("../models/Report")
   const jwt = require('jsonwebtoken')
   const {
     AuthenticationError,
@@ -47,7 +48,15 @@ module.exports = {
         return {success,group: group}
       },
       group: async(_,{id},{})=>{
-        const group = await Group.findOne({id: id});
+        const group = await Group.findOne({_id: id});
+        if(!group){
+          return new ApolloError("Group not found","NOT_FOUND");
+        }
+
+        return group;
+      },
+      report: async(_,{id},{})=>{
+        const group = await Report.findOne({_id: id});
         if(!group){
           return new ApolloError("Group not found","NOT_FOUND");
         }
@@ -74,6 +83,12 @@ module.exports = {
       newGroup: async(_,{data},{})=>{
         const group = new Group(data);
         const saved = await group.save();
+
+        return saved;
+      },
+      newGroup: async(_,{data},{})=>{
+        const report = new Report(data);
+        const saved = await report.save();
 
         return saved;
       },

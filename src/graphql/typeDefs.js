@@ -5,7 +5,7 @@ module.exports = gql`
       me: verifier!
       group(id: ID!): Group!
       groups: [Group]!
-      report: Report!
+      report(id: ID!): Report!
       reports: ReportSample!
   }
   type Mutation{ 

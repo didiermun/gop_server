@@ -24,6 +24,7 @@
     "http": "^0.0.1-security",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.5",
+    "mongoose-paginate-v2": "^1.3.18",
     "subscriptions-transport-ws": "^0.9.18"
   },
   "engines": {
