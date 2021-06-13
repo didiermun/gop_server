@@ -2,32 +2,130 @@ const {gql} = require("apollo-server");
 
 module.exports = gql`
   type Query {
-    #   patrouilles: [Patrouille]
-    #   codes:[coded]
-    #   code: coded
       me: verifier!
       group(id: ID!): Group!
-      groups: [Group]
-    #   records(patrouille_id: ID!): [Record]
-    #   patrouille(id: ID!): PatrouillePopulated
+      groups: [Group]!
+      report: Report!
+      reports: ReportSample!
   }
   type Mutation{ 
-    #   newPatrouille(patrouille: NewPatrouille!): Patrouille
-    #   newRecord(record: NewRecord!): Record
-    #   newCode(code: NewCode!): coded
-    #   deleteCode(id: ID!): coded
-    #   deletePatrouille(id: ID!): Patrouille
-    #   deleteRecord(id: ID!): Record
       login(code: String!): token
-      newGroup(data: newGroup!):Group!
-      updateGroup(data: newGroup!,id: ID!):Group!
+      newGroup(data: NewGroup!):Group!
+      updateGroup(data: NewGroup!,id: ID!):Group!
+      newReport(data: NewReport!): Report!
+      updateReport(data: NewReport!,id: ID!): Report!
       
+  }
+
+  input NewReport{
+    timing: TimingInput!
+    baseInfo: baseInfoInput!
+    budget: budgetInput!
+    interaction: interactionInput!
+    touristActivity: touristActivityInput!
+    health: healthInput!
+  }
+
+  type Report{
+    timing: Timing!
+    baseInfo: baseInfo!
+    budget: budget!
+    interaction: interaction!
+    touristActivity: touristActivity!
+    health: health!
+  }
+
+
+  input TimingInput{
+    start: String!
+    end: String!
+    date: String!
+  }
+
+  input baseInfoInput{
+    family: String!
+    habituated: String!
+    village: String!
+    distance: String!
+    location: String!
+    individuals: Int!
+    Oindividuals: Int!
+  }
+  input budgetInput{
+    feeding: [String!]!
+    distance: String!
+  }
+  input interactionInput{
+    distance: String!
+    reaction: [String]!
+    observation: [String]!
+    behaviour: [String]
+  }
+
+  input touristActivityInput{
+    tourist: Int!
+    period: String!
+    behaviour: [String]
+  }
+
+  input healthInput{
+    sick: Boolean!
+    signs: [String]
+  }
+  
+   type Timing{
+    start: String!
+    end: String!
+    date: String!
+  }
+
+  type baseInfo{
+    family: String!
+    habituated: String!
+    village: String!
+    distance: String!
+    location: String!
+    individuals: Int!
+    Oindividuals: Int!
+  }
+  type budget{
+    feeding: [String!]!
+    distance: String!
+  }
+  type interaction{
+    distance: String!
+    reaction: [String]!
+    observation: [String]!
+    behaviour: [String]
+  }
+
+  type touristActivity{
+    tourist: Int!
+    period: String!
+    behaviour: [String]
+  }
+
+  type health{
+    sick: Boolean!
+    signs: [String]
   }
   type token{
       success: Boolean!
       token: String
   }
 
+  type ReportSample{
+    id: String
+    group: Group!
+    date: String!
+    start: String!
+    end: String!
+    family: String!
+    individuals: Int!
+    Oindividuals: Int!
+    sick: Boolean!
+    reaction: [String]
+  }
   type Group{
     id: String!
     name: String!
@@ -36,86 +134,13 @@ module.exports = gql`
     createdAt: String
     updatedAt: String
   }
-  input newGroup{
+  input NewGroup{
     name: String!
     code: String!
     password: String!
   }
-  type Patrouille{ 
-      id: String!
-      date: String!
-      type: String!
-      sector: Int!
-      family: String!
-      path: String!
-      composition: String!
-      nTeamMembers: Int!
-      names: [String!]!
-      teamLeader: String!
-      gpsNO: Int!
-      feuilleNO: Int!
-
-  }
-  type PatrouillePopulated{ 
-      patrouille: Patrouille!
-      records: [Record]!
-  }
-  type Record{ 
-      id: String!
-      p_id: String!
-      time: String!
-      wpt: Int!
-      easting: Float!
-      northing: Float!
-      observation: String!
-      otype: String!
-      number: Int!
-      sitename: String!
-      remarks: [String!]!
-  }
-  input NewCode{
-      code: String!
-      level: String
-  }
   type verifier{
       success: Boolean!
-      code: baseCode
-  }
-
-  type baseCode{
-    code: String
-    level: String
-  }
-  type coded{
-      _id: ID
-      code: String!
-      level: String!
-      createdAt: String
-      updatedAt: String
-  }
-  input NewRecord{ 
-      p_id: String!
-      time: String!
-      wpt: Int!
-      easting: Float!
-      northing: Float!
-      observation: String!
-      otype: String!
-      number: Int!
-      sitename: String!
-      remarks: [String!]!
-  }
-  input NewPatrouille{
-      date: String!
-      type: String!
-      sector: Int!
-      family: String!
-      path: String!
-      composition: String!
-      nTeamMembers: Int!
-      names: [String!]!
-      teamLeader: String!
-      gpsNO: Int!
-      feuilleNO: Int!
+      group: Group
   }
 `
