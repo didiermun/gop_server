@@ -45,6 +45,18 @@ module.exports = {
         const success = await isAuthenticated(group);
 
         return {success,group: group}
+      },
+      group: async(_,{id},{})=>{
+        const group = await Group.findOne({id: id});
+        if(!group){
+          return new ApolloError("Group not found","NOT_FOUND");
+        }
+
+        return group;
+      },
+      groups: async(_,{},{})=>{
+        const groups = await Group.find();
+        return groups;
       }
     },
     Mutation:{
@@ -59,6 +71,23 @@ module.exports = {
         return {token,success: true}
 
       },
+      newGroup: async(_,{data},{})=>{
+        const group = new Group(data);
+        const saved = await group.save();
+
+        return saved;
+      },
+      updateGroup: async(_,{id,data},{})=>{
+        let group = await Group.findOne({_id: id});
+
+        if(!group){
+          return new ApolloError("Group not found","NOT_FOUND");
+        }
+        group = Object.assign(group,data);
+        let updated = await group.save();
+
+        return updated;
+      }
     }
       
   };

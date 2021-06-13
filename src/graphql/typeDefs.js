@@ -6,6 +6,8 @@ module.exports = gql`
     #   codes:[coded]
     #   code: coded
       me: verifier!
+      group(id: ID!): Group!
+      groups: [Group]
     #   records(patrouille_id: ID!): [Record]
     #   patrouille(id: ID!): PatrouillePopulated
   }
@@ -17,10 +19,27 @@ module.exports = gql`
     #   deletePatrouille(id: ID!): Patrouille
     #   deleteRecord(id: ID!): Record
       login(code: String!): token
+      newGroup(data: newGroup!):Group!
+      updateGroup(data: newGroup!,id: ID!):Group!
+      
   }
   type token{
       success: Boolean!
       token: String
+  }
+
+  type Group{
+    id: String!
+    name: String!
+    code: String!
+    password: String!
+    createdAt: String
+    updatedAt: String
+  }
+  input newGroup{
+    name: String!
+    code: String!
+    password: String!
   }
   type Patrouille{ 
       id: String!
