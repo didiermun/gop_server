@@ -18,15 +18,3 @@ exports.verifyToken = async(req, res, next) => {
         }
       });
 }
-
-exports.generateToken = async (code)=>{
-    const token = jwt.sign(
-        {
-          code: code.code,
-          level: code.level,
-        },
-        process.env.JWT_SECRET_KEY,
-        { expiresIn: "3h" }
-      );
-      return token;
-}

@@ -1,8 +1,6 @@
   // const { PrismaClient } = require('@prisma/client')
   // const prisma = new PrismaClient()
-  const {Record} = require("../models/record.model")
-  const {Patrouille} = require("../models/patrouille.model")
-  const {Code} = require("../models/code.model")
+  const {Group} = require("../models/Group")
   const jwt = require('jsonwebtoken')
   const {
     AuthenticationError,
@@ -28,34 +26,35 @@ const isAuthorized = async(code,level) => {
 
   return true;
 }
-  const generateToken = async(code) => {
+  const generateToken = async(group) => {
     const token = await jwt.sign(
       {
-        id: code._id,
-        code: code.code,
-        level: code.level
+        id: group._id,
+        name: group.name,
+        password: group.password,
+        code: group.code
       },
-      "SecretKey",
+      process.env.JWT_SECRET_KEY,
       { expiresIn: '5h' }
     )
     return token
   }
 module.exports = {
     Query: { 
-      me: async(_,{},{codeData}) => {
-        const success = await isAuthenticated(codeData);
+      me: async(_,{},{group}) => {
+        const success = await isAuthenticated(group);
 
-        return {success,code: codeData}
+        return {success,group: group}
       }
     },
     Mutation:{
-      login: async(_,{code},{codeData})=>{
-        const codefound = await Code.findOne({code: code});
-        if(!codefound){
+      login: async(_,{loginData},{})=>{
+        const group = await Group.findOne({code: loginData.code,password: loginData.password});
+        if(!group){
           return {token: '',success: false}
         }
 
-        const token = await generateToken(codefound);
+        const token = await generateToken(group);
 
         return {token,success: true}
 

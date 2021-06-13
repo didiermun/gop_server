@@ -4,7 +4,7 @@
   "description": "ANTI POACHING BACKEND",
   "main": "index.js",
   "scripts": {
-    "serve": "nodemon index.js",
+    "dev": "nodemon index.js",
     "start": "node index.js",
     "test": "backpack"
   },

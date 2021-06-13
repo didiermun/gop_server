@@ -2,20 +2,20 @@ const {gql} = require("apollo-server");
 
 module.exports = gql`
   type Query {
-      patrouilles: [Patrouille]
-      codes:[coded]
-      code: coded
+    #   patrouilles: [Patrouille]
+    #   codes:[coded]
+    #   code: coded
       me: verifier!
-      records(patrouille_id: ID!): [Record]
-      patrouille(id: ID!): PatrouillePopulated
+    #   records(patrouille_id: ID!): [Record]
+    #   patrouille(id: ID!): PatrouillePopulated
   }
   type Mutation{ 
-      newPatrouille(patrouille: NewPatrouille!): Patrouille
-      newRecord(record: NewRecord!): Record
-      newCode(code: NewCode!): coded
-      deleteCode(id: ID!): coded
-      deletePatrouille(id: ID!): Patrouille
-      deleteRecord(id: ID!): Record
+    #   newPatrouille(patrouille: NewPatrouille!): Patrouille
+    #   newRecord(record: NewRecord!): Record
+    #   newCode(code: NewCode!): coded
+    #   deleteCode(id: ID!): coded
+    #   deletePatrouille(id: ID!): Patrouille
+    #   deleteRecord(id: ID!): Record
       login(code: String!): token
   }
   type token{

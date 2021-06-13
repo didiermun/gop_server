@@ -4,8 +4,8 @@ const mongoose = require("mongoose");
 const pubsub = new PubSub();
 const express = require("express");
 const { ApolloServer} = require("apollo-server-express");
-const typeDefs = require("./graphql/typeDefs");
-const resolvers = require("./graphql/resolvers");
+const typeDefs = require("./src/graphql/typeDefs");
+const resolvers = require("./src/graphql/resolvers");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const app = express();
@@ -55,9 +55,8 @@ const server = new ApolloServer({
 const httpServer = createServer(app);
 server.installSubscriptionHandlers(httpServer);
 const PORT = process.env.PORT || 5000;
-const {DATABASE_URL} = require("./config/database")
 mongoose
-  .connect(DATABASE_URL, {
+  .connect(process.env.DATABASE_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useCreateIndex: true,
