@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 exports.verifyToken = async(req, res, next) => {
-    let token = req.headers["codeToken"];
+    let token = req.headers["auth_token"];
     if (!token) {
         return res.status(401).send({message:"UNAUTHENTICATED"});
     }

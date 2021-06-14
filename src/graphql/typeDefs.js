@@ -9,7 +9,7 @@ module.exports = gql`
       reports: ReportSample!
   }
   type Mutation{ 
-      login(code: String!): token
+      login(data: LoginInput!): token
       newGroup(data: NewGroup!):Group!
       updateGroup(data: NewGroup!,id: ID!):Group!
       newReport(data: NewReport!): Report!
@@ -27,6 +27,8 @@ module.exports = gql`
   }
 
   type Report{
+    _id: ID!
+    reporter: String!
     timing: Timing!
     baseInfo: baseInfo!
     budget: budget!
@@ -114,6 +116,12 @@ module.exports = gql`
       token: String
   }
 
+  input LoginInput{
+    password: String!
+    code: String!
+
+  }
+
   type ReportSample{
     id: String
     group: Group!
@@ -130,6 +138,7 @@ module.exports = gql`
     id: String!
     name: String!
     code: String!
+    leader: String!
     password: String!
     createdAt: String
     updatedAt: String
@@ -138,6 +147,7 @@ module.exports = gql`
     name: String!
     code: String!
     password: String!
+    leader: String!
   }
   type verifier{
       success: Boolean!

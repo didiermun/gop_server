@@ -21,7 +21,7 @@ app.get("/", (req, res) => {
   
 const verifiedToken = async (token) => {
     try {
-      return await jwt.verify(token, "SecretKey");
+      return await jwt.verify(token, process.env.JWT_SECRET_KEY);
     } catch (e) {
       return
     }
@@ -40,9 +40,9 @@ const server = new ApolloServer({
       else if(req && req.headers.token){
         token = req.headers.token;
       }
-      const codeData = await verifiedToken(token);
+      const group = await verifiedToken(token);
       return {
-        codeData,
+        group,
         pubsub,
         token
       };

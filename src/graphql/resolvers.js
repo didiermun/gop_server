@@ -9,16 +9,16 @@
     UserInputError,
     ApolloError,
   } = require("apollo-server-express");
-const isAuthenticated = async(code)=>{
-  if(!code){
+const isAuthenticated = async(data)=>{
+  if(!data){
     return false;
   }
-  console.log(code);
+  console.log(data);
   return true;
 }
 
-const isAuthorized = async(code,level) => {
-  if(!await isAuthenticated(code)){
+const isAuthorized = async(data,level) => {
+  if(!await isAuthenticated(data)){
     return false;
   }
   if(code.level != level){
@@ -58,7 +58,7 @@ module.exports = {
       report: async(_,{id},{})=>{
         const group = await Report.findOne({_id: id});
         if(!group){
-          return new ApolloError("Group not found","NOT_FOUND");
+          return new ApolloError("Report not found","NOT_FOUND");
         }
 
         return group;
@@ -69,8 +69,8 @@ module.exports = {
       }
     },
     Mutation:{
-      login: async(_,{loginData},{})=>{
-        const group = await Group.findOne({code: loginData.code,password: loginData.password});
+      login: async(_,{data},{})=>{
+        const group = await Group.findOne({code: data.code,password: data.password});
         if(!group){
           return {token: '',success: false}
         }
@@ -81,14 +81,28 @@ module.exports = {
 
       },
       newGroup: async(_,{data},{})=>{
+        let exists = await Group.findOne({code: data.code});
+        if(exists){
+          return new ApolloError("Code taken","DUPLICATE_CODE");
+        }
+
+        let user = await Group.findOne({leader: data.leader});
+        if(user){
+          return new ApolloError("User leads another group","DUPLICATE_LEADER")
+        }
         const group = new Group(data);
         const saved = await group.save();
 
         return saved;
       },
-      newGroup: async(_,{data},{})=>{
+      newReport: async(_,{data},{group})=>{
+        if(!await isAuthenticated(group)){
+          return new AuthenticationError("Login required");
+        }
+        data.reporter = group.id;
         const report = new Report(data);
         const saved = await report.save();
+        console.log(saved);
 
         return saved;
       },
