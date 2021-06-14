@@ -57,7 +57,7 @@ module.exports = {
       group: async(_,{id},{group})=>{
         const g = await Group.findOne({_id: id});
         if(!g){
-          return new ApolloError("Group not found","NOT_FOUND");
+          return new ApolloError("Group not found","GROUP_NOT_FOUND");
         }
 
         return g;
@@ -68,7 +68,7 @@ module.exports = {
         }
         const report = await Report.findOne({_id: id});
         if(!report){
-          return new ApolloError("Report not found","NOT_FOUND");
+          return new ApolloError("Report not found","REPORT_NOT_FOUND");
         }
 
         return report;
@@ -136,7 +136,7 @@ module.exports = {
         let g = await Group.findOne({_id: id});
 
         if(!g){
-          return new ApolloError("Group not found","NOT_FOUND");
+          return new ApolloError("Group not found","GROUP_NOT_FOUND");
         }
         g = Object.assign(g,data);
         let updated = await group.save();
