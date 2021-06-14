@@ -93,7 +93,7 @@ module.exports = {
       login: async(_,{data},{})=>{
         const group = await Group.findOne({code: data.code,password: data.password});
         if(!group){
-          return {token: '',success: false}
+          return new ApolloError("Credentails failed u","LOGIN_FAILED")
         }
 
         const token = await generateToken(group);

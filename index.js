@@ -65,43 +65,50 @@ const server = new ApolloServer({
       }
       else if (error.extensions.code === 'GROUP_NOT_FOUND') {
         return {
-          status: 400,
+          status: 404,
           message: 'Job is not found',
           error: 'notfound',
         }
       }
       else if (error.extensions.code === 'REPORT_NOT_FOUND') {
         return {
-          status: 400,
+          status: 404,
           message: 'Report is not found',
           error: 'notfound',
         }
       }
       else if (error.extensions.code === 'DUPLICATE_CODE') {
         return {
-          status: 400,
+          status: 403,
           message: 'Code found, it already exists',
           error: 'duplicates',
         }
       }
       else if (error.extensions.code === 'FORBIDEN') {
         return {
-          status: 400,
+          status: 403,
           message: 'Access denied',
           error: 'unauthorized',
         }
       }
       else if (error.extensions.code === 'DUPLICATE_LEADER') {
         return {
-          status: 400,
+          status: 403,
           message: 'Leader leaders another group',
           error: 'duplicates',
         }
       } else if (error.extensions.code === 'UNAUTHENTICATED') {
         return {
-          status: 400,
+          status: 401,
           message: 'Not authenticated',
           error: 'Unauthenticated',
+        }
+      } 
+      else if (error.extensions.code === 'LOGIN_FAILED') {
+        return {
+          status: 404,
+          message: 'Login failed',
+          error: 'invalid_credentials',
         }
       } else if (!error.path) {
         return {
