@@ -44,7 +44,8 @@ const isAuthorized = async(data,level) => {
         id: group._id,
         name: group.name,
         password: group.password,
-        code: group.code
+        code: group.code,
+        leader: group.leader
       },
       process.env.JWT_SECRET_KEY,
       { expiresIn: '5h' }
@@ -55,7 +56,6 @@ module.exports = {
     Query: { 
       me: async(_,{},{group}) => {
         const success = await isAuthenticated(group);
-
         return {success,group: group}
       },
       group: async(_,{id},{group})=>{
