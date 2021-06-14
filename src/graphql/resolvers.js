@@ -9,6 +9,13 @@
     UserInputError,
     ApolloError,
   } = require("apollo-server-express");
+  const options = (limit,pageCount) =>{
+    return {
+      sort: { date: -1 },
+      page: pageCount || 0,
+      limit: limit || 10,
+    }
+  }
 const isAuthenticated = async(data)=>{
   if(!data){
     return false;
@@ -47,25 +54,38 @@ module.exports = {
 
         return {success,group: group}
       },
-      group: async(_,{id},{})=>{
-        const group = await Group.findOne({_id: id});
-        if(!group){
+      group: async(_,{id},{group})=>{
+        const g = await Group.findOne({_id: id});
+        if(!g){
           return new ApolloError("Group not found","NOT_FOUND");
         }
 
-        return group;
+        return g;
       },
-      report: async(_,{id},{})=>{
-        const group = await Report.findOne({_id: id});
-        if(!group){
+      report: async(_,{id},{group})=>{
+        if(!await isAuthenticated(group)){
+          return new AuthenticationError("Login required")
+        }
+        const report = await Report.findOne({_id: id});
+        if(!report){
           return new ApolloError("Report not found","NOT_FOUND");
         }
 
-        return group;
+        return report;
       },
-      groups: async(_,{},{})=>{
+      groups: async(_,{},{group})=>{
+        if(!await isAuthenticated(group)){
+          return new AuthenticationError("Login required")
+        }
         const groups = await Group.find();
         return groups;
+      },
+      reports: async(_,{limit,page},{group})=>{
+        if(!await isAuthenticated(group)){
+          return new AuthenticationError("Login required")
+        }
+        const reports = await Report.paginate({},options(limit,page));
+        return reports.docs;
       }
     },
     Mutation:{
@@ -81,6 +101,9 @@ module.exports = {
 
       },
       newGroup: async(_,{data},{})=>{
+        if(!await isAuthenticated(group)){
+          return new AuthenticationError("Login required")
+        }
         let exists = await Group.findOne({code: data.code});
         if(exists){
           return new ApolloError("Code taken","DUPLICATE_CODE");
@@ -106,13 +129,16 @@ module.exports = {
 
         return saved;
       },
-      updateGroup: async(_,{id,data},{})=>{
-        let group = await Group.findOne({_id: id});
+      updateGroup: async(_,{id,data},{group})=>{
+        if(!await isAuthenticated(group)){
+          return new AuthenticationError("Login required")
+        }
+        let g = await Group.findOne({_id: id});
 
-        if(!group){
+        if(!g){
           return new ApolloError("Group not found","NOT_FOUND");
         }
-        group = Object.assign(group,data);
+        g = Object.assign(g,data);
         let updated = await group.save();
 
         return updated;

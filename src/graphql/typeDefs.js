@@ -6,7 +6,7 @@ module.exports = gql`
       group(id: ID!): Group!
       groups: [Group]!
       report(id: ID!): Report!
-      reports: ReportSample!
+      reports(limit: Int,page: Int): [Report]!
   }
   type Mutation{ 
       login(data: LoginInput!): token
