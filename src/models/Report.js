@@ -5,7 +5,8 @@ const Schema = mongoose.Schema;
 
 const reportSchema = new Schema({
     reporter:{
-        type: Schema.Types.ObjectId,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Group',
         required: true
     },
     timing:{

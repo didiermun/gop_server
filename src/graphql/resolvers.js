@@ -11,9 +11,10 @@
   } = require("apollo-server-express");
   const options = (limit,pageCount) =>{
     return {
-      sort: { date: -1 },
-      page: pageCount || 0,
+      sort: { createdAt: -1 },
+      page: pageCount || 1,
       limit: limit || 10,
+      populate: 'reporter'
     }
   }
 const isAuthenticated = async(data)=>{
@@ -66,7 +67,7 @@ module.exports = {
         if(!await isAuthenticated(group)){
           return new AuthenticationError("Login required")
         }
-        const report = await Report.findOne({_id: id});
+        const report = await Report.findOne({_id: id}).populate('reporter');
         if(!report){
           return new ApolloError("Report not found","REPORT_NOT_FOUND");
         }
@@ -100,7 +101,7 @@ module.exports = {
         return {token,success: true}
 
       },
-      newGroup: async(_,{data},{})=>{
+      newGroup: async(_,{data},{group})=>{
         if(!await isAuthenticated(group)){
           return new AuthenticationError("Login required")
         }
@@ -113,8 +114,8 @@ module.exports = {
         if(user){
           return new ApolloError("User leads another group","DUPLICATE_LEADER")
         }
-        const group = new Group(data);
-        const saved = await group.save();
+        const g = new Group(data);
+        const saved = await g.save();
 
         return saved;
       },

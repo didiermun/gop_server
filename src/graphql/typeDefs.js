@@ -12,8 +12,8 @@ module.exports = gql`
       login(data: LoginInput!): token
       newGroup(data: NewGroup!):Group!
       updateGroup(data: NewGroup!,id: ID!):Group!
-      newReport(data: NewReport!): Report!
-      updateReport(data: NewReport!,id: ID!): Report!
+      newReport(data: NewReport!): ReportCreated!
+      updateReport(data: NewReport!,id: ID!): ReportCreated!
       
   }
 
@@ -27,6 +27,16 @@ module.exports = gql`
   }
 
   type Report{
+    _id: ID!
+    reporter: Group
+    timing: Timing!
+    baseInfo: baseInfo!
+    budget: budget!
+    interaction: interaction!
+    touristActivity: touristActivity!
+    health: health!
+  }
+  type ReportCreated{
     _id: ID!
     reporter: String!
     timing: Timing!
@@ -122,18 +132,6 @@ module.exports = gql`
 
   }
 
-  type ReportSample{
-    id: String
-    group: Group!
-    date: String!
-    start: String!
-    end: String!
-    family: String!
-    individuals: Int!
-    Oindividuals: Int!
-    sick: Boolean!
-    reaction: [String]
-  }
   type Group{
     id: String!
     name: String!
