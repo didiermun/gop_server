@@ -3,6 +3,7 @@
   const {Group} = require("../models/Group")
   const {Report} = require("../models/Report")
   const jwt = require('jsonwebtoken')
+  const bcrypt = require('bcrypt')
   const {
     AuthenticationError,
     ForbiddenError,
@@ -17,6 +18,8 @@
       populate: 'reporter'
     }
   }
+
+  const salt = 12;
 const isAuthenticated = async(data)=>{
   if(!data){
     return false;
@@ -91,8 +94,12 @@ module.exports = {
     },
     Mutation:{
       login: async(_,{data},{})=>{
-        const group = await Group.findOne({code: data.code,password: data.password});
+        const group = await Group.findOne({code: data.code});
         if(!group){
+          return new ApolloError("Credentails failed u","LOGIN_FAILED")
+        }
+
+        if(!await bcrypt.compare(data.password,group.password)){
           return new ApolloError("Credentails failed u","LOGIN_FAILED")
         }
 
@@ -114,6 +121,8 @@ module.exports = {
         if(user){
           return new ApolloError("User leads another group","DUPLICATE_LEADER")
         }
+        const hashed_password = await bcrypt.hash(data.password,salt);
+        data.password = hashed_password;
         const g = new Group(data);
         const saved = await g.save();
 
