@@ -62,6 +62,10 @@ const reportSchema = new Schema({
             type: String,
             required: true
         },
+        period:{
+            type: String,
+            required: true
+        }
     },
     interaction:{
         distance:{

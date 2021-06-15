@@ -66,6 +66,7 @@ module.exports = gql`
   input budgetInput{
     feeding: [String!]!
     distance: String!
+    period: String!
   }
   input interactionInput{
     distance: String!
@@ -103,6 +104,7 @@ module.exports = gql`
   type budget{
     feeding: [String!]!
     distance: String!
+    period: String
   }
   type interaction{
     distance: String!
