@@ -2,6 +2,7 @@
   // const prisma = new PrismaClient()
   const {Group} = require("../models/Group")
   const {Report} = require("../models/Report")
+  const {Bookmark} = require("../models/Bookmark")
   const jwt = require('jsonwebtoken')
   const bcrypt = require('bcrypt')
   const {
@@ -77,6 +78,23 @@ module.exports = {
 
         return report;
       },
+      bookmarks: async(_,{},{group})=>{
+
+        if(!await isAuthenticated(group)){
+          return new AuthenticationError("Login required")
+        }
+        const books = await Bookmark.paginate({user: group.id},{populate:['user','report.reporter']})
+
+        return books.docs;
+
+      },
+      work: async(_,{},{})=>{
+        if(!await isAuthenticated(group)){
+          return new AuthenticationError("Login required")
+        }
+        const reports = await Report.paginate({reporter: group.id},options(limit,page));
+        return reports.docs;
+      },
       groups: async(_,{},{group})=>{
         if(!await isAuthenticated(group)){
           return new AuthenticationError("Login required")
@@ -138,6 +156,42 @@ module.exports = {
         console.log(saved);
 
         return saved;
+      },
+      bookReport: async(_,{id},{group})=>{
+        let bookmark = await Bookmark.findOne({_id: id});
+        if(!bookmark){
+          const book = new Bookmark({
+            user: group.id,
+            bookmarks: [id]
+          })
+          await book.save();
+          return {success : true, message: 'Report Bookmarked'}
+        }
+        if(bookmark.bookmarks.includes(id)){
+          return {success : true, message: 'Already Bookmarked'}
+        }
+
+        bookmark.bookmarks = [...bookmark.bookmarks,id];
+
+        await bookmark.save();
+        return {success : true, message: 'Report Bookmarked'}
+      },
+      bookReport: async(_,{id},{group})=>{
+        let bookmark = await Bookmark.findOne({_id: id});
+        if(!bookmark){
+         return {success : false, message: 'Bookmark not found'}
+        }
+        if(!bookmark.bookmarks.includes(id)){
+          return {success : false, message: 'Bookmark not found'}
+        }
+        var filtered = bookmark.bookmarks.filter(function(value, index, arr){ 
+          return value != id;
+        });
+
+        bookmark.bookmarks = filtered;
+
+        await bookmark.save();
+        return {success : true, message: 'Boomark removed'}
       },
       updateGroup: async(_,{id,data},{group})=>{
         if(!await isAuthenticated(group)){

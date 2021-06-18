@@ -7,6 +7,8 @@ module.exports = gql`
       groups: [Group]!
       report(id: ID!): Report!
       reports(limit: Int,page: Int): [Report]!
+      bookmarks: [Bookmarks]!
+      work: [Report]!
   }
   type Mutation{ 
       login(data: LoginInput!): token
@@ -14,7 +16,8 @@ module.exports = gql`
       updateGroup(data: NewGroup!,id: ID!):Group!
       newReport(data: NewReport!): ReportCreated!
       updateReport(data: NewReport!,id: ID!): ReportCreated!
-      
+      bookReport(id: ID!): bookResponse!
+      removeBook(id: ID!): bookResponse!
   }
 
   input NewReport{
@@ -24,6 +27,16 @@ module.exports = gql`
     interaction: interactionInput!
     touristActivity: touristActivityInput!
     health: healthInput!
+  }
+
+  type Bookmarks{
+    user: Group
+    bookmarks: [Report]
+  }
+
+  type bookResponse{
+    success: Boolean!
+    message: String!
   }
 
   type Report{
