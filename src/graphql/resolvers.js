@@ -83,7 +83,7 @@ module.exports = {
         if(!await isAuthenticated(group)){
           return new AuthenticationError("Login required")
         }
-        const books = await Bookmark.paginate({user: group.id},{populate:['user','report.reporter']})
+        const books = await Bookmark.paginate({user: group.id},{populate:['user','bookmarks.reporter']})
 
         return books.docs;
 
@@ -158,6 +158,9 @@ module.exports = {
         return saved;
       },
       bookReport: async(_,{id},{group})=>{
+        if(!await isAuthenticated(group)){
+          return new AuthenticationError("Login required")
+        }
         let bookmark = await Bookmark.findOne({_id: id});
         if(!bookmark){
           const book = new Bookmark({
@@ -176,7 +179,10 @@ module.exports = {
         await bookmark.save();
         return {success : true, message: 'Report Bookmarked'}
       },
-      bookReport: async(_,{id},{group})=>{
+      removeBook: async(_,{id},{group})=>{
+        if(!await isAuthenticated(group)){
+          return new AuthenticationError("Login required")
+        }
         let bookmark = await Bookmark.findOne({_id: id});
         if(!bookmark){
          return {success : false, message: 'Bookmark not found'}
