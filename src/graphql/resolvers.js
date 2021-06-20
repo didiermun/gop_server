@@ -78,13 +78,13 @@ module.exports = {
 
         return report;
       },
-      bookmarks: async(_,{},{group})=>{
+      bookmarks: async(_,{limit,page},{group})=>{
 
         if(!await isAuthenticated(group)){
           return new AuthenticationError("Login required")
         }
         // const books = await Bookmark.paginate({user: group.id},{populate:['user','bookmarks','bookmarks.reporter']})
-        const bookmarks = await Bookmark.findOne({user: group.id}).deepPopulate(['bookmarks.reporter','user']);
+        const bookmarks = await Bookmark.findOne({user: group.id}).limit(limit || 10).sort({date: -1}).skip(limit*page || 0).deepPopulate(['bookmarks.reporter','user']);
         if(!bookmarks){
           return new ApolloError("You dont have an bookmark yet","NO_BOOK")
         }
