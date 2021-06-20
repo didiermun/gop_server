@@ -1,4 +1,5 @@
 const mongoose = require('mongoose')
+const pagination = require('mongoose-paginate-v2')
 
 const Schema = mongoose.Schema;
 
@@ -23,4 +24,5 @@ const GroupSchema = new Schema({
 },{
     timestamps: true
 });
+GroupSchema.plugin(pagination);
 exports.Group = mongoose.model("Group", GroupSchema);

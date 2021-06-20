@@ -4,10 +4,10 @@ module.exports = gql`
   type Query {
       me: verifier!
       group(id: ID!): Group!
-      groups: [Group]!
+      groups(limit: Int,page: Int): [Group]!
       report(id: ID!): Report!
       reports(limit: Int,page: Int): [Report]!
-      bookmarks: Bookmarks!
+      bookmarks(limit: Int,page: Int): Bookmarks!
       work(limit: Int,page: Int): [Report]!
   }
   type Mutation{ 
@@ -152,7 +152,6 @@ module.exports = gql`
     name: String!
     code: String!
     leader: String!
-    password: String!
     createdAt: String
     updatedAt: String
   }

@@ -98,12 +98,12 @@ module.exports = {
         const reports = await Report.paginate({reporter: group.id},options(limit,page));
         return reports.docs;
       },
-      groups: async(_,{},{group})=>{
+      groups: async(_,{limit,page},{group})=>{
         if(!await isAuthenticated(group)){
           return new AuthenticationError("Login required")
         }
-        const groups = await Group.find();
-        return groups;
+        const groups = await Group.paginate({},options(limit,page));
+        return groups.docs;
       },
       reports: async(_,{limit,page},{group})=>{
         if(!await isAuthenticated(group)){
