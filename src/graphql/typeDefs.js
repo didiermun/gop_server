@@ -17,7 +17,7 @@ module.exports = gql`
       newReport(data: NewReport!): ReportCreated!
       updateReport(data: NewReport!,id: ID!): ReportCreated!
       bookReport(id: ID!): bookResponse!
-      removeBook(id: ID!): bookResponse!
+      # removeBook(id: ID!): bookResponse!
   }
 
   input NewReport{

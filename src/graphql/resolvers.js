@@ -171,37 +171,43 @@ module.exports = {
             bookmarks: [id]
           })
           await book.save();
-          return {success : true, message: 'Report Bookmarked'}
+          return {success : true, message: 'Added your first bookmark'}
         }
         if(bookmark.bookmarks.includes(id)){
-          return {success : true, message: 'Already Bookmarked'}
+          var filtered = bookmark.bookmarks.filter(function(value, index, arr){ 
+            return value != id;
+          });
+  
+          bookmark.bookmarks = filtered;
+          await book.save();
+          return {success : true, message: 'Removed form bookmarks'}
         }
 
         bookmark.bookmarks = [...bookmark.bookmarks,id];
 
         await bookmark.save();
-        return {success : true, message: 'Report Bookmarked'}
+        return {success : true, message: 'Added to your bookmarks'}
       },
-      removeBook: async(_,{id},{group})=>{
-        if(!await isAuthenticated(group)){
-          return new AuthenticationError("Login required")
-        }
-        let bookmark = await Bookmark.findOne({user: group.id});
-        if(!bookmark){
-         return {success : false, message: 'Bookmark not found'}
-        }
-        if(!bookmark.bookmarks.includes(id)){
-          return {success : false, message: 'Bookmark not found'}
-        }
-        var filtered = bookmark.bookmarks.filter(function(value, index, arr){ 
-          return value != id;
-        });
+      // removeBook: async(_,{id},{group})=>{
+      //   if(!await isAuthenticated(group)){
+      //     return new AuthenticationError("Login required")
+      //   }
+      //   let bookmark = await Bookmark.findOne({user: group.id});
+      //   if(!bookmark){
+      //    return {success : false, message: 'Bookmark not found'}
+      //   }
+      //   if(!bookmark.bookmarks.includes(id)){
+      //     return {success : false, message: 'Bookmark not found'}
+      //   }
+      //   var filtered = bookmark.bookmarks.filter(function(value, index, arr){ 
+      //     return value != id;
+      //   });
 
-        bookmark.bookmarks = filtered;
+      //   bookmark.bookmarks = filtered;
 
-        await bookmark.save();
-        return {success : true, message: 'Boomark removed'}
-      },
+      //   await bookmark.save();
+      //   return {success : true, message: 'Boomark removed'}
+      // },
       updateGroup: async(_,{id,data},{group})=>{
         if(!await isAuthenticated(group)){
           return new AuthenticationError("Login required")
