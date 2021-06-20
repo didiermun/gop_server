@@ -59,6 +59,13 @@ module.exports = {
         const success = await isAuthenticated(group);
         return {success,group: group}
       },
+      isbookmarked: async(_,{id},{group}) => {
+        const bookmark = await Bookmark.findOne({user: group.id,bookmarks: id});
+        if(bookmark){
+          return {success: true, message: 'Report is bookmarked'}
+        }
+        return {success: false, message: 'Report is not bookmarked'}
+      },
       group: async(_,{id},{group})=>{
         const g = await Group.findOne({_id: id});
         if(!g){

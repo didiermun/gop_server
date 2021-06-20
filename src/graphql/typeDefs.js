@@ -9,6 +9,7 @@ module.exports = gql`
       reports(limit: Int,page: Int): [Report]!
       bookmarks(limit: Int,page: Int): Bookmarks!
       work(limit: Int,page: Int): [Report]!
+      isbookmarked(id: ID!): bookResponse!
   }
   type Mutation{ 
       login(data: LoginInput!): token
