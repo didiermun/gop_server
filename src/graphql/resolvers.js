@@ -88,7 +88,7 @@ module.exports = {
         return books.docs;
 
       },
-      work: async(_,{},{})=>{
+      work: async(_,{limit,page},{group})=>{
         if(!await isAuthenticated(group)){
           return new AuthenticationError("Login required")
         }
