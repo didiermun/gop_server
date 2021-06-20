@@ -7,7 +7,7 @@ module.exports = gql`
       groups: [Group]!
       report(id: ID!): Report!
       reports(limit: Int,page: Int): [Report]!
-      bookmarks: [Bookmarks]!
+      bookmarks: Bookmarks!
       work: [Report]!
   }
   type Mutation{ 

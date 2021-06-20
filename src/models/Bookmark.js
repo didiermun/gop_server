@@ -1,4 +1,6 @@
 const mongoose = require('mongoose')
+const pagination = require('mongoose-paginate-v2')
+var deepPopulate = require('mongoose-deep-populate')(mongoose);
 
 const Schema = mongoose.Schema;
 
@@ -16,4 +18,6 @@ const bookMarksSchema = new Schema({
 },{
     timestamps: true
 });
+bookMarksSchema.plugin(deepPopulate);
+bookMarksSchema.plugin(pagination);
 exports.Bookmark = mongoose.model("Bookmark", bookMarksSchema);

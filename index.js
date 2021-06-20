@@ -77,6 +77,13 @@ const server = new ApolloServer({
           error: 'notfound',
         }
       }
+      else if (error.extensions.code === 'NO_BOOK') {
+        return {
+          status: 404,
+          message: 'You havent bookmarked anything yet',
+          error: 'notfound',
+        }
+      }
       else if (error.extensions.code === 'DUPLICATE_CODE') {
         return {
           status: 403,
