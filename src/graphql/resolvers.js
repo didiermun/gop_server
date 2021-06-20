@@ -164,7 +164,7 @@ module.exports = {
         if(!await isAuthenticated(group)){
           return new AuthenticationError("Login required")
         }
-        let bookmark = await Bookmark.findOne({_id: id});
+        let bookmark = await Bookmark.findOne({user: group.id});
         if(!bookmark){
           const book = new Bookmark({
             user: group.id,
@@ -186,7 +186,7 @@ module.exports = {
         if(!await isAuthenticated(group)){
           return new AuthenticationError("Login required")
         }
-        let bookmark = await Bookmark.findOne({_id: id});
+        let bookmark = await Bookmark.findOne({user: group.id});
         if(!bookmark){
          return {success : false, message: 'Bookmark not found'}
         }
