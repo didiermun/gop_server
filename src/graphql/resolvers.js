@@ -178,8 +178,8 @@ module.exports = {
             return value != id;
           });
   
-          bookmark.bookmarks = filtered;
-          await book.save();
+          bookmark.bookmarks = [...filtered];
+          await bookmark.save();
           return {success : true, message: 'Removed form bookmarks'}
         }
 
