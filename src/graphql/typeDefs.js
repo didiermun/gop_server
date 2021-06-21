@@ -10,6 +10,8 @@ module.exports = gql`
       bookmarks(limit: Int,page: Int): Bookmarks!
       work(limit: Int,page: Int): [Report]!
       isbookmarked(id: ID!): bookResponse!
+      overallStats(range: String): [statistics]!
+      compareGroups(g1: String!,g2: String!): [compareStatistics]!
   }
   type Mutation{ 
       login(data: LoginInput!): token
@@ -20,7 +22,27 @@ module.exports = gql`
       bookReport(id: ID!): bookResponse!
       # removeBook(id: ID!): bookResponse!
   }
-
+  type statistics{
+    id: String!
+    name: String!
+    code: String!
+    leader: String!
+    createdAt: String
+    updatedAt: String
+    reports: Int!
+  }
+  type compareStatistics{
+    d1: groupData!
+    d2: groupData!
+  }
+  type groupData{
+    group: Group!
+    reports: [timeReports]
+  }
+  type timeReports{
+    name: String!
+    reportNumber: String!
+  }
   input NewReport{
     timing: TimingInput!
     baseInfo: baseInfoInput!

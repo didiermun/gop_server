@@ -98,6 +98,19 @@ module.exports = {
         return bookmarks;
 
       },
+      overallStats: async(_,{range},{})=>{
+        if(range == "year"){
+          const reports = await Report.find({date: {$gte: Math.floor(+new Date()/1000)-31536000}})
+          console.log(Math.floor(+new Date()));
+          console.log(reports);
+
+          // let stats = [];
+          // top = await Report.countDocuments({reporter: group._id});
+        }
+        const top = await Group.find({}).sort({reports: -1}).limit(5);
+        // console.log(top)
+        return top;
+      },
       work: async(_,{limit,page},{group})=>{
         if(!await isAuthenticated(group)){
           return new AuthenticationError("Login required")
@@ -164,6 +177,12 @@ module.exports = {
         const report = new Report(data);
         const saved = await report.save();
         console.log(saved);
+
+        let reporter = await Group.findOne({_id: group.id});
+        if(reporter){
+          reporter.reports = reporter.reports+1;
+          await reporter.save();
+        }
 
         return saved;
       },

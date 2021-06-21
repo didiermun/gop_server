@@ -19,6 +19,11 @@ const GroupSchema = new Schema({
     password:{
         type: String,
         required: true
+    },
+    reports:{
+        type: Number,
+        required: false,
+        default: 0
     }
 
 },{
