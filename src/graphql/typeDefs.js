@@ -12,6 +12,8 @@ module.exports = gql`
       isbookmarked(id: ID!): bookResponse!
       overallStats(range: String): [statistics]!
       compareGroups(g1: String!,g2: String!): [compareStatistics]!
+      stats: [statsData]!
+      latest_stats: [statsData]!
   }
   type Mutation{ 
       login(data: LoginInput!): token
@@ -34,6 +36,11 @@ module.exports = gql`
   type compareStatistics{
     d1: groupData!
     d2: groupData!
+  }
+  type statsData{
+      year: Int!
+      month: Int!
+      numberOfReports: Int!
   }
   type groupData{
     group: Group!

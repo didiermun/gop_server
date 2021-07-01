@@ -1,6 +1,7 @@
   // const { PrismaClient } = require('@prisma/client')
   // const prisma = new PrismaClient()
   const {Group} = require("../models/Group")
+  const {Stats} = require("../models/Stat")
   const {Report} = require("../models/Report")
   const {Bookmark} = require("../models/Bookmark")
   const jwt = require('jsonwebtoken')
@@ -131,7 +132,32 @@ module.exports = {
         }
         const reports = await Report.paginate({},options(limit,page));
         return reports.docs;
-      }
+      },
+      stats:async(_,{},{codeData}) =>{
+        const stats = await Stats.find();
+        return  stats;
+      },
+      latest_stats:async(_,{},{codeData}) =>{
+        const date = new Date()
+        let stats = await Stats.find({
+          month: {
+            $gte: date.getMonth()-4
+          },
+          year: date.getFullYear(),
+        }).sort({month: -1})
+        if(date.getMonth <= 3){
+          const additional = await Stats.find({
+            month: {
+              $gte:( 12- (5-date.getMonth()))
+            },
+            year: date.getFullYear()-1
+          }).sort({month: -1})
+
+          stats = [...stats,...additional];
+
+        }
+        return stats;
+      },
     },
     Mutation:{
       login: async(_,{data},{})=>{
@@ -172,6 +198,20 @@ module.exports = {
       newReport: async(_,{data},{group})=>{
         if(!await isAuthenticated(group)){
           return new AuthenticationError("Login required");
+        }
+        const date = new Date(data?.timing?.date);
+        let stats = await Stats.findOne({year: date.getFullYear(), month: date.getMonth()+1});
+        if(stats){
+          stats.numberOfReports = stats.numberOfReports+1;
+          await stats.save();
+        }
+        else{
+          const statistics = new Stats({
+            year: date.getFullYear(),
+            month: date.getMonth()+1,
+            numberOfReports: 1,
+          })
+          await statistics.save();
         }
         data.reporter = group.id;
         const report = new Report(data);
