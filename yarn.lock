@@ -1624,15 +1624,24 @@ mongoose-deep-populate@^3.2.0:
   resolved "https://registry.yarnpkg.com/mongoose-deep-populate/-/mongoose-deep-populate-3.2.0.tgz#3abbdf42f63460f7c4a830da5ed31e1e4fd07abd"
   integrity sha512-MD77o0Wo1e+s8sipP9xRytDdEBX5mfJGRfGGLA1D378+o9mXgCES3+SZxKyhPe+xyLc30abxAX5CK36l9TdpJg==
 
+mongoose-lean-virtuals@^1.1.0:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/mongoose-lean-virtuals/-/mongoose-lean-virtuals-1.1.1.tgz#450c1a74b36c573a49db16769ea44d8457c03b44"
+  integrity sha512-8chOqpVE3bcoWT2pIgcJeIZlXaOfQCavZgQZF4qytUtjRBqsNMyzUoR16qdw9XL2kC478N8iA8z0AA+NSS0d1A==
+  dependencies:
+    mpath "^0.8.4"
+
 mongoose-legacy-pluralize@1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/mongoose-legacy-pluralize/-/mongoose-legacy-pluralize-1.0.2.tgz#3ba9f91fa507b5186d399fb40854bff18fb563e4"
   integrity sha512-Yo/7qQU4/EyIS8YDFSeenIvXxZN+ld7YdV9LqFVQJzTLye8unujAWPZ4NWKfFA+RNjh+wvTWKY9Z3E5XM6ZZiQ==
 
 mongoose-paginate-v2@^1.3.18:
-  version "1.3.18"
-  resolved "https://registry.yarnpkg.com/mongoose-paginate-v2/-/mongoose-paginate-v2-1.3.18.tgz#714631a94afd0136c77e8af6cfcaad3ed37026bd"
-  integrity sha512-MTEyXvQmUNlXyPGophxILHTYQQ80r3uMtgdnKVr+4qgWLM6JxHbWsFpCmaJJ7ofuV7bhkfBTGx3EDoJo+bIKFw==
+  version "1.9.5"
+  resolved "https://registry.yarnpkg.com/mongoose-paginate-v2/-/mongoose-paginate-v2-1.9.5.tgz#469a77ffd99ad1040f5a19f396dd69d060bda7b8"
+  integrity sha512-sgPbV0G7SfdW1XdEuNMokzJOT85GNx786itp6UiNmDvKGyxMSHbeyn4tMZBseOmGu2uOo5ByVgfjhaxkOBY71A==
+  dependencies:
+    mongoose-lean-virtuals "^1.1.0"
 
 mongoose@^5.12.5:
   version "5.12.5"
@@ -1656,6 +1665,11 @@ mpath@0.8.3:
   version "0.8.3"
   resolved "https://registry.yarnpkg.com/mpath/-/mpath-0.8.3.tgz#828ac0d187f7f42674839d74921970979abbdd8f"
   integrity sha512-eb9rRvhDltXVNL6Fxd2zM9D4vKBxjVVQNLNijlj7uoXUy19zNDsIif5zR+pWmPCWNKwAtqyo4JveQm4nfD5+eA==
+
+mpath@^0.8.4:
+  version "0.8.4"
+  resolved "https://registry.yarnpkg.com/mpath/-/mpath-0.8.4.tgz#6b566d9581621d9e931dd3b142ed3618e7599313"
+  integrity sha512-DTxNZomBcTWlrMW76jy1wvV37X/cNNxPW1y2Jzd4DZkAaC5ZGsm8bfGfNOthcDuRJujXLqiuS6o3Tpy0JEoh7g==
 
 mquery@3.2.5:
   version "3.2.5"
